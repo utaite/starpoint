@@ -4,6 +4,7 @@ mitm_redirect
 .database
 scripts/in
 .cdn
+.env
 .misc
 web/public/tailwind.css
 scripts/__pycache__

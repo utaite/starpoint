@@ -2,6 +2,7 @@ import Fastify, { FastifyRequest } from "fastify";
 import { ContentTypeParserDoneFunction } from "fastify/types/content-type-parser";
 import fastifyStatic from "@fastify/static";
 import { pack, unpack } from "msgpackr";
+import net from 'net'
 import path from "path";
 // api routes
 import apiPlugin from "./routes/api";
@@ -161,4 +162,37 @@ fastify.listen({ port: listenPort, host: listenHost }, (err, address) => {
         process.exit(1)
     }
     console.log(`StarPoint is listening on http://${listenHost}:${listenPort}`)
+})
+
+const tcpServer = net.createServer((socket) => {
+    console.log(`[TCP server connection] ${socket.remoteAddress}:${socket.remotePort}`)
+
+    socket.on('data', (data) => {
+        const message = data.toString().trim().replace(/\0/g, '')
+        console.log(`[TCP server on] ${message}`)
+
+        try {
+            const json = JSON.parse(message)
+            console.log(`[TCP server JSON]`, json)
+
+            // 응답
+            const response = JSON.stringify({ status: 'ok' })
+            socket.write(response + '\n')
+        } catch (e) {
+            console.error('[TCP server error]', e)
+            socket.write(JSON.stringify({ status: 'error', message: 'invalid json' }) + '\n')
+        }
+    })
+
+    socket.on('end', () => {
+        console.log(`[TCP server end] ${socket.remoteAddress}:${socket.remotePort}`)
+    })
+
+    socket.on('error', (err) => {
+        console.error('[TCP server error]', err)
+    })
+})
+
+tcpServer.listen(process.env.LISTEN_TCP_PORT, () => {
+    console.log(`TCP server is listening on http://${listenHost}:${process.env.LISTEN_TCP_PORT}`)
 })
