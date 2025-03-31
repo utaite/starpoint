@@ -54,19 +54,19 @@ function getAccountSync(
 }
 
 /**
- * Gets an account from their IdpId.
+ * Gets an account from their IdpAlias.
  * 
- * @param idpId The IdpId of the account.
+ * @param idpAlias The IdpId of the account.
  * @returns An account or null.
  */
-export function getAccountFromIdpIdSync(
-    idpId: string
+export function getAccountFromIdpAliasSync(
+    idpAlias: string
 ): Account | null {
     const raw = db.prepare(`
     SELECT id, app_id, first_login_time, idp_alias, idp_code, idp_id, reg_time, last_login_time, status
     FROM accounts
-    WHERE idp_id = ?
-    `).get(idpId) as RawAccount | undefined
+    WHERE idp_alias = ?
+    `).get(idpAlias) as RawAccount | undefined
 
     if (raw === undefined) return null
 

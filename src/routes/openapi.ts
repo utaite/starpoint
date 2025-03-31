@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { SessionType } from "../data/types";
-import { deleteAccountSessionsOfType, deleteSession, getAccount, getAccountFromIdpIdSync, getAccountFromPlayerIdSync, getSession, insertAccount, insertSession, updateAccount } from "../data/wdfpData";
+import { deleteAccountSessionsOfType, deleteSession, getAccount, getAccountFromIdpAliasSync, getAccountFromPlayerIdSync, getSession, insertAccount, insertSession, updateAccount } from "../data/wdfpData";
 import { generateIdpAlias } from "../utils";
 
 interface CreateDeviceAccessTokenBody {
@@ -286,7 +286,7 @@ const routes = async (fastify: FastifyInstance) => {
         const idpId = body.whiteKey
 
         // create account
-        const existingAccount = accountId === undefined ? getAccountFromIdpIdSync(idpId) : await getAccount(accountId)
+        const existingAccount = accountId === undefined ? getAccountFromIdpAliasSync(idpAlias) : await getAccount(accountId)
         const account = existingAccount === null ? await insertAccount({
             appId: body.appId,
             idpAlias: idpAlias,
