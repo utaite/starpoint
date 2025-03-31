@@ -39,7 +39,7 @@ starpoint_start_functions(){
 
         cd "$STARPOINT_ROOT"
         # shellcheck disable=SC2068
-        mitmweb_inner_exec $@ --set connection_strategy=lazy --allow-hosts gc-openapi-zinny3.kakaogames.com --allow-hosts gc-infodesk-zinny3.kakaogames.com --allow-hosts na.wdfp.kakaogames.com --allow-hosts patch.wdfp.kakaogames.com -s scripts/mitm-redirect-traffic.py
+        mitmweb_inner_exec $@ --set block_global=false --set connection_strategy=lazy --allow-hosts gc-openapi-zinny3.kakaogames.com --allow-hosts gc-infodesk-zinny3.kakaogames.com --allow-hosts na.wdfp.kakaogames.com --allow-hosts patch.wdfp.kakaogames.com -s scripts/mitm-redirect-traffic.py
     }
 
     mitmweb_exec_wireguard(){
